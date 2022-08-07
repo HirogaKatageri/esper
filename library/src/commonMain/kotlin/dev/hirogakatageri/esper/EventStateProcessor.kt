@@ -16,17 +16,14 @@
 
 package dev.hirogakatageri.esper
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 abstract class EventStateProcessor<in E, out S>(
     scope: CoroutineScope,
-    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
     defaultState: S,
 ): EventState<E, S> {
 
@@ -38,9 +35,9 @@ abstract class EventStateProcessor<in E, out S>(
     private val _loadingState: MutableStateFlow<S?> = MutableStateFlow(null)
 
     /**
-     * This can be subscribed to in order to show a LOADING state based on event data.
-     * The value becomes null once processEvent() is finished.
-     * */
+     * This can be subscribed to in order to show a LOADING state based on
+     * event data. The value becomes null once processEvent() is finished.
+     */
     override val loadingState: StateFlow<S?> get() = _loadingState
 
     init {
@@ -64,6 +61,10 @@ abstract class EventStateProcessor<in E, out S>(
     }
 
     open suspend fun createLoadingState(event: E): S? = null
+
+    suspend fun updateLoadingState (event: E) = withContext(dispatcher) {
+        _loadingState.value = createLoadingState(event)
+    }
 
     abstract suspend fun createState(event: E): S
 
