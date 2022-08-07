@@ -1,4 +1,4 @@
-package dev.hirogakatageri.desktop.sandbox.esp
+package dev.hirogakatageri.esper
 
 import kotlinx.coroutines.flow.StateFlow
 

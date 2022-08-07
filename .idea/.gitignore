@@ -3,3 +3,5 @@ jarRepositories.xml
 misc.xml
 modules.xml
 workspace.xml
+assetWizardSettings.xml
+artifacts/**

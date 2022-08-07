@@ -10,6 +10,7 @@ group = "dev.hirogakatageri"
 version = "1.0.0"
 
 dependencies {
+    implementation(project(":library"))
     implementation(compose.desktop.currentOs)
     testImplementation(kotlin("test-junit"))
 }

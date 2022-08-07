@@ -19,6 +19,8 @@ dependencyResolutionManagement {
     }
 }
 
+include(":library")
+include(":app-android-native")
 include(":app-desktop-compose")
 
 rootProject.name = "esper"

@@ -1,5 +1,6 @@
-package dev.hirogakatageri.desktop.sandbox.esp
+package dev.hirogakatageri.esper
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 
 abstract class EventStateProcessor<in E, out S>(
     scope: CoroutineScope,
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
     defaultState: S,
 ): EventState<E, S> {
 
@@ -26,7 +28,7 @@ abstract class EventStateProcessor<in E, out S>(
     override val loadingState: StateFlow<S?> get() = _loadingState
 
     init {
-        scope.launch(Dispatchers.IO) {
+        scope.launch(dispatcher) {
             _event.collect { event ->
                 if (event != null) {
                     _loadingState.value = createLoadingState(event)
